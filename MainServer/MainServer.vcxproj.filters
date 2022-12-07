@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Network">
-      <UniqueIdentifier>{f9085746-0c0f-4b9c-8641-ce1a4063d3e0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="DB">
       <UniqueIdentifier>{7b0be5cb-4300-47fb-a8ba-cb4efd92b7ab}</UniqueIdentifier>
     </Filter>
@@ -22,21 +19,12 @@
     <ClCompile Include="MainServer.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="NetAddress.cpp">
-      <Filter>Network</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="NetAddress.h">
-      <Filter>Network</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Types.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
