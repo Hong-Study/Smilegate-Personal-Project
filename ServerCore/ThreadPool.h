@@ -8,6 +8,7 @@ public:
 	template<class T, class... Args>
 	future<typename std::result_of<T(Args...)>::type> enqueue(T&& t, Args&&... args);
 
+private:
 	void WorkerThread();
 
 private:

@@ -1,7 +1,4 @@
 ﻿#include "pch.h"
-#include "Service.h"
-#include "Session.h"
-#include "Listener.h"
 
 class GameSession : public Session
 {
@@ -28,24 +25,25 @@ public:
 	}
 
 };
+
+void Work(ServerServiceRef service) {
+	while (true) {
+		service->GetIocpCore()->Dispatch();
+	}
+}
+
+void hello() {
+
+}
 int main()
 {
-	ThreadPool th(THREAD_SIZE);
+	ServerServiceRef service = make_shared<ServerService>();
+	service->SetFactory(make_shared<GameSession>);
+	service->SetIocpCore(make_shared<IocpCore>());
+	service->SetNetAddress(NetAddress(L"12.0.0.1", 5000));
+	service->Start();
 
-	ServerServiceRef service = make_shared<ServerService>(
-		NetAddress(L"127.0.0.1", 5000)
-		, make_shared<IocpCore>()
-		//, make_shared<GameSession>
-		, 100);
-
-	//service->Start();
-
-	/*for (int i = 0; i < THREAD_SIZE; i++) {
-		th.enqueue([=]() 
-			{
-				while (true) {
-					service->GetIocpCore()->Dispatch();
-				}
-			});
-	}*/
+	for (int i = 0; i < THREAD_SIZE; i++) {
+		GThreadPool->enqueue(hello);
+	}
 }

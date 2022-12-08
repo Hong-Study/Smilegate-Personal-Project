@@ -20,7 +20,7 @@ using SessionFactory = function<SessionRef(void)>;
 class Service : public enable_shared_from_this<Service>
 {
 public:
-	Service(ServiceType type, NetAddress address, IocpCoreRef core, int32 maxSessionCount);
+	Service();
 	Service(ServiceType type, NetAddress address,IocpCoreRef core, SessionFactory factory, int32 maxSessionCount = 1);
 	virtual ~Service();
 
@@ -41,6 +41,11 @@ public:
 	NetAddress			GetNetAddress() { return _netAddress; }
 	IocpCoreRef&		GetIocpCore() { return _iocpCore; }
 
+public:
+	virtual void SetFactory(SessionFactory factory) abstract;
+	virtual void SetNetAddress(NetAddress address) abstract;
+	virtual void SetIocpCore(IocpCoreRef core) abstract;
+
 protected:
 	ServiceType			_type;
 	NetAddress			_netAddress = {};
@@ -55,13 +60,17 @@ protected:
 class ServerService : public Service
 {
 public:
-	ServerService(NetAddress address, IocpCoreRef core, int32 maxSessionCount);
+	ServerService();
 	ServerService(NetAddress targetAddress, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount = 1);
 	virtual ~ServerService() {}
 
 	virtual bool	Start() override;
 	virtual void	CloseService() override;
 
+public:
+	virtual void SetFactory(SessionFactory factory) override;
+	virtual void SetNetAddress(NetAddress address) override;
+	virtual void SetIocpCore(IocpCoreRef core) override;
 private:
 	ListenerRef		_listener = nullptr;
 };

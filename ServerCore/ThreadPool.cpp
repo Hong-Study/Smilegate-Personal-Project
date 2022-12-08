@@ -25,7 +25,7 @@ void ThreadPool::WorkerThread()
 		if (this->stop && this->tasks.empty())
 			return;
 
-		auto task = std::move(tasks.front());
+		function<void()> task = std::move(tasks.front());
 		tasks.pop();
 		lk.unlock();
 		task();
@@ -35,6 +35,10 @@ void ThreadPool::WorkerThread()
 template<class T, class ...Args>
 inline future<typename std::result_of<T(Args...)>::type> ThreadPool::enqueue(T&& t, Args && ...args)
 {
+	if (stop) {
+		throw std::runtime_error("ThreadPool »ç¿ë ÁßÁöµÊ");
+	}
+
 	using return_type = typename std::result_of<T(Args...)>::type;
 
 	auto task = std::make_shared<std::packaged_task<return_type()>>(std::bind(std::forward<T>(t), std::forward<Args>(args)...));

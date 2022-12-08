@@ -25,5 +25,9 @@ using namespace std;
 
 #include "SpinLock.h"
 #include "ThreadPool.h"
+#include "Service.h"
+#include "Session.h"
+#include "Listener.h"
+#include "CoreGlobal.h"
 
 inline void HandleError(string error) { cout << error << endl; }

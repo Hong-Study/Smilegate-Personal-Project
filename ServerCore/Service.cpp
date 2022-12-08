@@ -2,12 +2,12 @@
 #include "Service.h"
 #include "Session.h"
 
+Service::Service()
+{
+}
+
 Service::Service(ServiceType type, NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount)
 	: _type(type), _netAddress(address), _iocpCore(core), _sessionFactory(factory), _maxSessionCount(maxSessionCount) {}
-
-
-Service::Service(ServiceType type, NetAddress address, IocpCoreRef core, int32 maxSessionCount)
-	: _type(type), _netAddress(address), _iocpCore(core), _maxSessionCount(maxSessionCount) {}
 
 Service::~Service()
 {
@@ -47,12 +47,25 @@ void Service::ReleaseSession(SessionRef session)
 	}
 }
 
-ServerService::ServerService(NetAddress address, IocpCoreRef core, int32 maxSessionCount)
-	:Service(ServiceType::Server, address, core, maxSessionCount)
+void ServerService::SetFactory(SessionFactory factory)
 {
-
-
+	_sessionFactory = factory;
 }
+
+void ServerService::SetNetAddress(NetAddress address)
+{
+	_netAddress = address;
+}
+
+void ServerService::SetIocpCore(IocpCoreRef core)
+{
+	_iocpCore = core;
+}
+
+ServerService::ServerService()
+{
+}
+
 ServerService::ServerService(NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount)
 	:Service(ServiceType::Server, address, core, factory, maxSessionCount)
 {
