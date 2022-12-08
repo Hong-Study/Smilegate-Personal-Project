@@ -1,14 +1,16 @@
 ﻿#pragma once
-#pragma comment(lib, "ws2_32.lib")
 
 #include "Types.h"
+#include "CoreMacro.h"
+
+//#include <windows.h>
+#include <iostream>
+using namespace std;
 
 #include <winsock2.h>
 #include <mswsock.h>
 #include <ws2tcpip.h>
-#include <windows.h>
-#include <iostream>
-using namespace std;
+#pragma comment(lib, "ws2_32.lib")
 
 #include<vector>
 #include<queue>
@@ -18,10 +20,10 @@ using namespace std;
 #include<future>
 #include<functional>
 #include<chrono>
+#include<set>
+#include<memory>
 
-#include "SocketUtils.h"
-#include "Listener.h"
-#include "IocpCore.h"
-
+#include "SpinLock.h"
+#include "ThreadPool.h"
 
 inline void HandleError(string error) { cout << error << endl; }

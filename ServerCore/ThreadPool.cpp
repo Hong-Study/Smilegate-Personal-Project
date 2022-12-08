@@ -33,9 +33,9 @@ void ThreadPool::WorkerThread()
 }
 
 template<class T, class ...Args>
-inline future<typename std::result_of<T>::type> ThreadPool::enqueue(T&& t, Args && ...args)
+inline future<typename std::result_of<T(Args...)>::type> ThreadPool::enqueue(T&& t, Args && ...args)
 {
-	using return_type = typename std::invoke_result<T, Args...>::type;
+	using return_type = typename std::result_of<T(Args...)>::type;
 
 	auto task = std::make_shared<std::packaged_task<return_type()>>(std::bind(std::forward<T>(t), std::forward<Args>(args)...));
 	std::future<return_type> task_result = task->get_future();

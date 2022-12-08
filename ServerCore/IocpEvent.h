@@ -1,13 +1,16 @@
 #pragma once
-#include "pch.h"
-#include "Session.h"
+
+class Session;
 
 enum class EventType : uint8 {
 	Connect
+	,Disconnect
 	,Accept
 	,Recv
 	,Send
 };
+
+// 扁夯 IocpEvent 按眉
 class IocpEvent : public OVERLAPPED
 {
 public:
@@ -16,38 +19,44 @@ public:
 	void Init();
 	EventType GetType() { return _type; }
 
-protected:
+public:
 	EventType _type;
+	IocpObjectRef owner;
 };
 
+// 立加矫 IocpEvent 按眉
 class AcceptEvent : public IocpEvent
 {
 public:
 	AcceptEvent() : IocpEvent(EventType::Accept) { }
 
-	void		SetSession(Session* session) { _session = session; }
-	Session*	GetSession() { return _session; }
-
-private:
-	Session*	_session = nullptr;
+public:
+	SessionRef	_session = nullptr;
 };
 
-/*----------------
-	RecvEvent
------------------*/
 
+class DisconnectEvent : public IocpEvent
+{
+public:
+	DisconnectEvent() : IocpEvent(EventType::Disconnect) { }
+};
+
+class ConnectEvent : public IocpEvent 
+{
+public:
+	ConnectEvent() : IocpEvent(EventType::Connect) { }
+};
 class RecvEvent : public IocpEvent
 {
 public:
 	RecvEvent() : IocpEvent(EventType::Recv) { }
 };
 
-/*----------------
-	SendEvent
------------------*/
-
 class SendEvent : public IocpEvent
 {
 public:
 	SendEvent() : IocpEvent(EventType::Send) { }
-}; '
+
+public:
+	vector<BYTE> buffer;
+};

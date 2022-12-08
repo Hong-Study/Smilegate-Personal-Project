@@ -9,18 +9,25 @@ IocpCore::IocpCore()
 		HandleError("CreateIoCOmpletionPort");
 }
 
-bool IocpCore::Register(class IocpObject* object)
+IocpCore::~IocpCore()
 {
-	return CreateIoCompletionPort(object->GetHandle(), _iocpHandle, reinterpret_cast<ULONG_PTR>(object), 0);
+	::CloseHandle(_iocpHandle);
 }
 
-bool IocpCore::Dispatch(uint32 timeoutMS = INFINITE)
+bool IocpCore::Register(IocpObjectRef iocpobject)
+{
+	return CreateIoCompletionPort(iocpobject->GetHandle(), _iocpHandle, 0, 0);
+}
+
+bool IocpCore::Dispatch(uint32 timeoutMS)
 {
 	DWORD numOfBytes;
-	IocpObject* iocpObject = nullptr;
+	ULONG_PTR key = 0;
 	IocpEvent* iocpEvent = nullptr;
-	if (GetQueuedCompletionStatus(_iocpHandle, &numOfBytes, reinterpret_cast<PULONG_PTR>(iocpObject), reinterpret_cast<LPOVERLAPPED*>(iocpEvent), timeoutMS)) {
-		iocpObject->Dispatch(iocpEvent);
+
+	if (GetQueuedCompletionStatus(_iocpHandle, &numOfBytes, &key, reinterpret_cast<LPOVERLAPPED*>(iocpEvent), timeoutMS)) {
+		IocpObjectRef iocpObject = iocpEvent->owner;
+		iocpObject->Dispatch(iocpEvent, numOfBytes);
 	}else
 	{
 		int32 errCode = ::WSAGetLastError();
@@ -30,6 +37,7 @@ bool IocpCore::Dispatch(uint32 timeoutMS = INFINITE)
 			return false;
 		default:
 			// TODO : ·Î±× Âï±â
+			IocpObjectRef iocpObject = iocpEvent->owner;
 			iocpObject->Dispatch(iocpEvent, numOfBytes);
 			break;
 		}

@@ -30,11 +30,9 @@ int main()
 
 	// Connect
 	//while (true)
+	if (::connect(clientSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
 	{
-		if (::connect(clientSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
-		{
 			
-		}
 	}
 
 	// 家南 府家胶 馆券
