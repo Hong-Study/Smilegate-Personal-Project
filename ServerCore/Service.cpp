@@ -2,12 +2,13 @@
 #include "Service.h"
 #include "Session.h"
 
-Service::Service()
+//Service::Service(ServiceType type, NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount)
+//	: _type(type), _netAddress(address), _iocpCore(core), _sessionFactory(factory), _maxSessionCount(maxSessionCount) {}
+
+Service::Service(int maxSessionCount)
+	: _maxSessionCount(maxSessionCount)
 {
 }
-
-Service::Service(ServiceType type, NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount)
-	: _type(type), _netAddress(address), _iocpCore(core), _sessionFactory(factory), _maxSessionCount(maxSessionCount) {}
 
 Service::~Service()
 {
@@ -32,7 +33,7 @@ SessionRef Service::CreateSession()
 void Service::AddSession(SessionRef session)
 {
 	{
-		//lock_guard<SpinLock> guard (spinLock);
+		lock_guard<SpinLock> guard (spinLock);
 		_sessionCount++;
 		_sessions.insert(session);
 	}
@@ -41,7 +42,7 @@ void Service::AddSession(SessionRef session)
 void Service::ReleaseSession(SessionRef session)
 {
 	{
-		//lock_guard<SpinLock> guard(spinLock);
+		lock_guard<SpinLock> guard(spinLock);
 		_sessionCount--;
 		_sessions.erase(session);
 	}
@@ -62,28 +63,32 @@ void ServerService::SetIocpCore(IocpCoreRef core)
 	_iocpCore = core;
 }
 
-ServerService::ServerService()
-{
-}
+//ServerService::ServerService(NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount)
+//	:Service(ServiceType::Server, address, core, factory, maxSessionCount)
+//{
+//
+//}
 
-ServerService::ServerService(NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount)
-	:Service(ServiceType::Server, address, core, factory, maxSessionCount)
+ServerService::ServerService(int maxSessionCount)
+	:Service(maxSessionCount)
 {
-
 }
 
 bool ServerService::Start()
 {
-	if (CanStart() == false)
+	if (CanStart() == false) {
 		return false;
-
+	}
+	
 	_listener = make_shared<Listener>();
-	if (_listener == nullptr)
+	if (_listener == nullptr) {
 		return false;
-
-	if (_listener->StartAccept(static_pointer_cast<ServerService>(shared_from_this())) == false)
+	}
+	
+	if (_listener->StartAccept(static_pointer_cast<ServerService>(shared_from_this())) == false) {
 		return false;
-
+	}
+	
 	return true;
 }
 

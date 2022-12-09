@@ -15,8 +15,8 @@ public:
 	virtual ~Session();
 
 public:
-	void Send(BYTE* buffer, int32 len);
-	void DisConnect(const WCHAR* cause);
+	void				Send(BYTE* buffer, int32 len);
+	void				DisConnect(const WCHAR* cause);
 
 	shared_ptr<Service>	GetService() { return _service.lock(); }
 	void				SetService(shared_ptr<Service> service) { _service = service; }

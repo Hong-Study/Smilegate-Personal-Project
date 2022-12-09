@@ -4,20 +4,21 @@
 #include "SpinLock.h"
 #include "ThreadPool.h"
 
-SpinLock* spinLock = nullptr;
+SpinLock spinLock;
 
 ThreadPool* GThreadPool = nullptr;
+
 class CoreGlobal {
 public:
 	CoreGlobal() {
 		GThreadPool = new ThreadPool(10);
-		spinLock = new SpinLock();
+		//spinLock = new SpinLock();
 		SocketUtils::Init();
 	}
 
 	~CoreGlobal() {
 		delete GThreadPool;
-		delete spinLock;
+		//delete spinLock;
 		SocketUtils::Clear();
 	}
 }GCoreGlobal;

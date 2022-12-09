@@ -1,12 +1,12 @@
 ﻿#include "pch.h"
 
-class GameSession : public Session
+class URLSession : public Session
 {
 public:
-	GameSession() {
+	URLSession() {
 		cout << "실행" << endl;
 	}
-	~GameSession()
+	~URLSession()
 	{
 		cout << "~GameSession" << endl;
 	}
@@ -23,27 +23,24 @@ public:
 	{
 		cout << "OnSend Len = " << len << endl;
 	}
-
 };
 
-void Work(ServerServiceRef service) {
-	while (true) {
-		service->GetIocpCore()->Dispatch();
-	}
-}
-
-void hello() {
-
-}
 int main()
 {
-	ServerServiceRef service = make_shared<ServerService>();
-	service->SetFactory(make_shared<GameSession>);
+	ServerServiceRef service = make_shared<ServerService>(10);
+	service->SetFactory(make_shared< URLSession>);
 	service->SetIocpCore(make_shared<IocpCore>());
-	service->SetNetAddress(NetAddress(L"12.0.0.1", 5000));
-	service->Start();
+	service->SetNetAddress(NetAddress(L"127.0.0.1", 5000));
+
+	if (!service->Start())
+		HandleError("Start Error");
 
 	for (int i = 0; i < THREAD_SIZE; i++) {
-		GThreadPool->enqueue(hello);
+		GThreadPool->enqueue([=]()
+			{
+				service->GetIocpCore()->Dispatch();
+			});
 	}
+
+	GThreadPool->Join();
 }

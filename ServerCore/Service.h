@@ -20,15 +20,14 @@ using SessionFactory = function<SessionRef(void)>;
 class Service : public enable_shared_from_this<Service>
 {
 public:
-	Service();
-	Service(ServiceType type, NetAddress address,IocpCoreRef core, SessionFactory factory, int32 maxSessionCount = 1);
+	Service(int maxSessionCount = 1);
+	//Service(ServiceType type, NetAddress address,IocpCoreRef core, SessionFactory factory, int32 maxSessionCount = 1);
 	virtual ~Service();
 
 	virtual bool		Start() abstract;
 	bool				CanStart() { return _sessionFactory != nullptr; }
 
 	virtual void		CloseService();
-	void				SetSessionFactory(SessionFactory func) { _sessionFactory = func; }
 
 	SessionRef			CreateSession();
 	void				AddSession(SessionRef session);
@@ -60,8 +59,8 @@ protected:
 class ServerService : public Service
 {
 public:
-	ServerService();
-	ServerService(NetAddress targetAddress, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount = 1);
+	ServerService(int maxSessionCount = 1);
+	//ServerService(NetAddress targetAddress, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount = 1);
 	virtual ~ServerService() {}
 
 	virtual bool	Start() override;

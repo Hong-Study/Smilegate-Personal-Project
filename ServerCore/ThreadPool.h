@@ -5,9 +5,8 @@ public:
 	ThreadPool(int num_threads_);
 	~ThreadPool();
 
-	template<class T, class... Args>
-	future<typename std::result_of<T(Args...)>::type> enqueue(T&& t, Args&&... args);
-
+	bool enqueue(function<void()>);
+	void Join();
 private:
 	void WorkerThread();
 
