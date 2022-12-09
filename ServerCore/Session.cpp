@@ -15,17 +15,16 @@ Session::~Session()
 void Session::Send(BYTE* buffer, int32 len)
 {
 	SendEvent* sendEvent = new SendEvent();
+	sendEvent->owner = shared_from_this();
 	sendEvent->buffer.resize(len);
 	memcpy(sendEvent->buffer.data(), buffer, len);
 
-	
 	{
 		// 중첩 관리 -> 후에 고치기
 		lock_guard<SpinLock> guard(spinLock);
-
-		cout << "전달 등록하기";
 		RegisterSend(sendEvent);
 	}
+	
 }
 
 void Session::DisConnect(const WCHAR* cause)
@@ -86,7 +85,10 @@ void Session::ProcessRecv(int32 numOfBytes)
 
 	OnRecv(_recvBuffer, numOfBytes);
 
-	RegisterRecv();
+	{
+		lock_guard<SpinLock> guard(spinLock);
+		RegisterRecv();
+	}
 }
 
 void Session::ProcessDisconnect()
@@ -108,10 +110,10 @@ void Session::ProcessConnect()
 	RegisterRecv();
 }
 
-bool Session::RegisterSend(SendEvent* sendEvent)
+void Session::RegisterSend(SendEvent* sendEvent)
 {
 	if (IsConnected() == false)
-		return false;
+		return;
 
 	WSABUF wsaBuf;
 	wsaBuf.buf = (char*)sendEvent->buffer.data();
@@ -119,7 +121,7 @@ bool Session::RegisterSend(SendEvent* sendEvent)
 
 	DWORD numOfBytes = 0;
 
-	if (SOCKET_ERROR != WSASend(_sock, &wsaBuf, 1, &numOfBytes, 0, sendEvent, nullptr)) {
+	if (SOCKET_ERROR == WSASend(_sock, &wsaBuf, 1, &numOfBytes, 0, sendEvent, nullptr)) {
 		int32 errorCode = ::WSAGetLastError();
 		if (errorCode != WSA_IO_PENDING){
 			HandleError("WSASend");
@@ -127,25 +129,23 @@ bool Session::RegisterSend(SendEvent* sendEvent)
 			delete sendEvent;
 		}
 	}
-	return true;
 }
 
-bool Session::RegisterRecv()
+void Session::RegisterRecv()
 {
 	if (IsConnected() == false)
-		return false;
-
+		return;
 	_recvEvent.Init();
 	_recvEvent.owner = shared_from_this();
 
 	WSABUF wsaBuf;
 	wsaBuf.buf = reinterpret_cast<char*>(_recvBuffer);
-	wsaBuf.len = sizeof(_recvBuffer);
+	wsaBuf.len = 1000;
 
 	DWORD numOfBytes = 0;
 	DWORD flag = 0;
 
-	if (SOCKET_ERROR == WSARecv(_sock, &wsaBuf, 1, &numOfBytes, &flag, reinterpret_cast<LPWSAOVERLAPPED>(&_recvEvent), NULL)) 
+	if (SOCKET_ERROR == WSARecv(_sock, &wsaBuf, 1, &numOfBytes, &flag, &_recvEvent, nullptr))
 	{
 		int32 errorCode = ::WSAGetLastError();
 		if (errorCode != WSA_IO_PENDING)
@@ -154,9 +154,6 @@ bool Session::RegisterRecv()
 			_recvEvent.owner = nullptr; // RELEASE_REF
 		}
 	}
-		
-
-	return true;
 }
 
 bool Session::RegisterDisconnect()

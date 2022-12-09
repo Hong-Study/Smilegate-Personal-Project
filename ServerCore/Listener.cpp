@@ -106,8 +106,9 @@ void Listener::ProcessAccept(AcceptEvent* acceptEvent)
 	session->SetNetAddress(NetAddress(sockAddress));
 	
 	char ipbuf[INET_ADDRSTRLEN] = {};
-	short port = ntohs(sockAddress.sin_port);
-	cout << "IP : %s(%d) Client Connect\n" << inet_ntop(AF_INET, &(sockAddress.sin_addr), ipbuf, INET_ADDRSTRLEN);
+	inet_ntop(AF_INET, &(sockAddress.sin_addr), ipbuf, INET_ADDRSTRLEN);
+
+	cout << "IP : " << ipbuf << " Client Connect\n";
 	
 	session->ProcessConnect();
 	RegisterAccept(acceptEvent);
