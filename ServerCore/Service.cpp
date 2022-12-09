@@ -32,20 +32,17 @@ SessionRef Service::CreateSession()
 
 void Service::AddSession(SessionRef session)
 {
-	{
-		lock_guard<SpinLock> guard (spinLock);
-		_sessionCount++;
-		_sessions.insert(session);
-	}
+	lock_guard<SpinLock> guard(spinLock);
+	_sessionCount++;
+	_sessions.insert(session);
 }
 
 void Service::ReleaseSession(SessionRef session)
 {
-	{
-		lock_guard<SpinLock> guard(spinLock);
-		_sessionCount--;
-		_sessions.erase(session);
-	}
+	lock_guard<SpinLock> guard(spinLock);
+	_sessions.erase(session);
+	_sessionCount--;
+
 }
 
 void ServerService::SetFactory(SessionFactory factory)

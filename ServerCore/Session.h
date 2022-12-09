@@ -39,8 +39,8 @@ private:
 	void ProcessConnect();
 
 	// 작업 등록
-	bool RegisterSend(SendEvent* sendEvent);
-	bool RegisterRecv();
+	void RegisterSend(SendEvent* sendEvent);
+	void RegisterRecv();
 	bool RegisterDisconnect();
 	bool RegisterConnect();
 
@@ -52,7 +52,7 @@ protected:
 
 private:
 	weak_ptr<Service>		_service;
-	NetAddress				_addr;
+	NetAddress				_addr = { };
 	SOCKET					_sock = INVALID_SOCKET;
 	atomic<bool>			_connected = false;
 
