@@ -15,15 +15,30 @@ Listener::~Listener()
 bool Listener::StartAccept(ServerServiceRef service)
 {
 	_service = service;
+	if (_service == nullptr)
+		return false;
+
 	_socket = SocketUtils::CreateSocket();
 	if (_socket == INVALID_SOCKET)
 		return false;
+
 	if (_service->GetIocpCore()->Register(shared_from_this()) == false)
 		return false;
-	if (SocketUtils::Bind(_socket, service->GetNetAddress()))
+
+	if (SocketUtils::SetReuseAddress(_socket, true) == false)
 		return false;
 
-	const int32 acceptCount = 1;
+	if (SocketUtils::SetLinger(_socket, 0, 0) == false)
+		return false;
+
+	if (SocketUtils::Bind(_socket, _service->GetNetAddress()) == false)
+		return false;
+
+	if (SocketUtils::Listen(_socket) == false)
+		return false;
+
+	const int32 acceptCount = _service->GetMaxSessionCount();
+
 	for (int32 i = 0; i < acceptCount; i++)
 	{
 		AcceptEvent* acceptEvent = new AcceptEvent;
@@ -63,6 +78,7 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 	DWORD bytesReceived = 0;
 	if (false == SocketUtils::AcceptEx(_socket, session->GetSocket(), session->_recvBuffer, 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, OUT & bytesReceived, static_cast<LPOVERLAPPED>(acceptEvent)))
 	{
+		
 		const int32 errorCode = ::WSAGetLastError();
 		if (errorCode != WSA_IO_PENDING)
 		{
@@ -75,7 +91,6 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 void Listener::ProcessAccept(AcceptEvent* acceptEvent)
 {
 	SessionRef session = acceptEvent->_session;
-
 	if (false == SocketUtils::SetUpdateAcceptSocket(session->GetSocket(), _socket)) {
 		RegisterAccept(acceptEvent);
 		return;

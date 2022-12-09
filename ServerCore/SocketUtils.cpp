@@ -13,11 +13,11 @@ void SocketUtils::Init()
 
 	/* 런타임에 주소 얻어오는 API */
 	SOCKET dummySocket = CreateSocket();
-	if (BindWindowsFunction(dummySocket, WSAID_CONNECTEX, reinterpret_cast<LPVOID*>(&ConnectEx)))
+	if (!BindWindowsFunction(dummySocket, WSAID_CONNECTEX, reinterpret_cast<LPVOID*>(&ConnectEx)))
 		HandleError("ConnectEx Bind");
-	if(BindWindowsFunction(dummySocket, WSAID_DISCONNECTEX, reinterpret_cast<LPVOID*>(&DisconnectEx)))
+	if(!BindWindowsFunction(dummySocket, WSAID_DISCONNECTEX, reinterpret_cast<LPVOID*>(&DisconnectEx)))
 		HandleError("DisconnectEx Bind");
-	if(BindWindowsFunction(dummySocket, WSAID_ACCEPTEX, reinterpret_cast<LPVOID*>(&AcceptEx)))
+	if(!BindWindowsFunction(dummySocket, WSAID_ACCEPTEX, reinterpret_cast<LPVOID*>(&AcceptEx)))
 		HandleError("AccpetEx Bind");
 
 	Close(dummySocket);
@@ -52,6 +52,34 @@ bool SocketUtils::BindAnyAddress(SOCKET socket, uint16 port)
 bool SocketUtils::Listen(SOCKET socket, int32 backlog)
 {
 	return SOCKET_ERROR != ::listen(socket, backlog);
+}
+
+bool SocketUtils::SetLinger(SOCKET socket, uint16 onoff, uint16 linger)
+{
+	LINGER option;
+	option.l_onoff = onoff;
+	option.l_linger = linger;
+	return SetSockOpt(socket, SOL_SOCKET, SO_LINGER, option);
+}
+
+bool SocketUtils::SetReuseAddress(SOCKET socket, bool flag)
+{
+	return SetSockOpt(socket, SOL_SOCKET, SO_REUSEADDR, flag);
+}
+
+bool SocketUtils::SetRecvBufferSize(SOCKET socket, int32 size)
+{
+	return SetSockOpt(socket, SOL_SOCKET, SO_RCVBUF, size);
+}
+
+bool SocketUtils::SetSendBufferSize(SOCKET socket, int32 size)
+{
+	return SetSockOpt(socket, SOL_SOCKET, SO_SNDBUF, size);
+}
+
+bool SocketUtils::SetTcpNoDelay(SOCKET socket, bool flag)
+{
+	return SetSockOpt(socket, SOL_SOCKET, TCP_NODELAY, flag);
 }
 
 // ListenSocket의 특성을 ClientSocket에 그대로 적용

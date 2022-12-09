@@ -27,13 +27,14 @@ int main()
 	serverAddr.sin_family = AF_INET;
 	::inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
 	serverAddr.sin_port = ::htons(5000);
-
-	// Connect
-	//while (true)
 	if (::connect(clientSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
-	{
-			
-	}
+		cout << "立加 角菩";
+	else
+		cout << "Connect 己傍\n";
+	// Connect
+	while (true) {}
+	
+	
 
 	// 家南 府家胶 馆券
 	::closesocket(clientSocket);

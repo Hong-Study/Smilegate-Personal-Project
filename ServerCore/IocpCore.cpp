@@ -21,11 +21,11 @@ bool IocpCore::Register(IocpObjectRef iocpobject)
 
 bool IocpCore::Dispatch(uint32 timeoutMS)
 {
-	DWORD numOfBytes;
+	DWORD numOfBytes = 0 ;
 	ULONG_PTR key = 0;
 	IocpEvent* iocpEvent = nullptr;
 
-	if (GetQueuedCompletionStatus(_iocpHandle, &numOfBytes, &key, reinterpret_cast<LPOVERLAPPED*>(iocpEvent), timeoutMS)) {
+	if (GetQueuedCompletionStatus(_iocpHandle, &numOfBytes, &key, reinterpret_cast<LPOVERLAPPED*>(&iocpEvent), timeoutMS)) {
 		IocpObjectRef iocpObject = iocpEvent->owner;
 		iocpObject->Dispatch(iocpEvent, numOfBytes);
 	}else

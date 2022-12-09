@@ -18,9 +18,12 @@ void Session::Send(BYTE* buffer, int32 len)
 	sendEvent->buffer.resize(len);
 	memcpy(sendEvent->buffer.data(), buffer, len);
 
+	
 	{
 		// 중첩 관리 -> 후에 고치기
-		//lock_guard<SpinLock> guard(spinLock);
+		lock_guard<SpinLock> guard(spinLock);
+
+		cout << "전달 등록하기";
 		RegisterSend(sendEvent);
 	}
 }
