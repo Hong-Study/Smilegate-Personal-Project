@@ -15,7 +15,7 @@ public:
 
 	bool Connect();
 	int Send(char* data, int len);
-	int Recv(char* data);
+	int Recv(char* buf);
 
 private:
 	void SetBind(wstring ip, short port);
