@@ -45,10 +45,10 @@ bool ClientNetwork::Connect()
 
 int ClientNetwork::Send(char* data, int len)
 {
-	return 0;
+	return send(_socket, data, len, 0);
 }
 
-int ClientNetwork::Recv(char* data)
+int ClientNetwork::Recv(char* buf)
 {
-	return 0;
+	return recv(_socket, buf, 100, 0);
 }

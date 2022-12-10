@@ -29,8 +29,9 @@ protected:
 private:
 	CString URL_INPUT;
 	CString URL_OUTPUT;
-	ClientNetwork* socket;
+	ClientNetwork* _socket;
 
+	char recv_Buffer[10];
 public:
 	afx_msg void OnInputClicked();
 };
