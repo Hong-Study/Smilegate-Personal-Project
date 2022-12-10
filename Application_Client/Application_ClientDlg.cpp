@@ -15,22 +15,28 @@
 
 // CApplicationClientDlg 대화 상자
 
-
-
 CApplicationClientDlg::CApplicationClientDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_APPLICATION_CLIENT_DIALOG, pParent)
+	, URL_INPUT(_T(""))
+	, URL_OUTPUT(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	socket = new ClientNetwork(L"127.0.0.1", 5000);
+	if (!socket->Connect())
+		exit(0);
 }
 
 void CApplicationClientDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_URLL, URL_INPUT);
+	DDX_Text(pDX, IDC_URLS, URL_OUTPUT);
 }
 
 BEGIN_MESSAGE_MAP(CApplicationClientDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON1, &CApplicationClientDlg::OnInputClicked)
 END_MESSAGE_MAP()
 
 
@@ -86,3 +92,8 @@ HCURSOR CApplicationClientDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+void CApplicationClientDlg::OnInputClicked()
+{
+	GetDlgItemText(IDC_URLL, URL_INPUT);
+	SetDlgItemText(IDC_URLS, URL_INPUT);
+}
