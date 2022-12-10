@@ -1,9 +1,5 @@
-﻿
-// Application_ClientDlg.h: 헤더 파일
-//
-
-#pragma once
-
+﻿#pragma once
+#include "ClientNetwork.h"
 
 // CApplicationClientDlg 대화 상자
 class CApplicationClientDlg : public CDialogEx
@@ -20,7 +16,6 @@ public:
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
 
-
 // 구현입니다.
 protected:
 	HICON m_hIcon;
@@ -29,5 +24,13 @@ protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
+
 	DECLARE_MESSAGE_MAP()
+private:
+	CString URL_INPUT;
+	CString URL_OUTPUT;
+	ClientNetwork* socket;
+
+public:
+	afx_msg void OnInputClicked();
 };

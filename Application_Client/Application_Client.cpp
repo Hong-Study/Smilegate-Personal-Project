@@ -1,8 +1,4 @@
-﻿
-// Application_Client.cpp: 애플리케이션에 대한 클래스 동작을 정의합니다.
-//
-
-#include "pch.h"
+﻿#include "pch.h"
 #include "framework.h"
 #include "Application_Client.h"
 #include "Application_ClientDlg.h"
@@ -11,15 +7,9 @@
 #define new DEBUG_NEW
 #endif
 
-
-// Client_Main
-
 BEGIN_MESSAGE_MAP(Client_Main, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
-
-
-// Client_Main 생성
 
 Client_Main::Client_Main()
 {
@@ -29,16 +19,12 @@ Client_Main::Client_Main()
 
 
 // 유일한 Client_Main 개체입니다.
-
 Client_Main theApp;
 
-
 // Client_Main 초기화
-
 BOOL Client_Main::InitInstance()
 {
 	CWinApp::InitInstance();
-
 
 	// 대화 상자에 셸 트리 뷰 또는
 	// 셸 목록 뷰 컨트롤이 포함되어 있는 경우 셸 관리자를 만듭니다.
