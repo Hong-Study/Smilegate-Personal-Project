@@ -7,6 +7,7 @@
 #include "Application_Client.h"
 #include "Application_ClientDlg.h"
 #include "afxdialogex.h"
+#include <afxinet.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -37,6 +38,7 @@ BEGIN_MESSAGE_MAP(CApplicationClientDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CApplicationClientDlg::OnInputClicked)
+	ON_BN_CLICKED(IDC_BUTTON2, &CApplicationClientDlg::OnBnClickedBrowser)
 END_MESSAGE_MAP()
 
 
@@ -111,4 +113,26 @@ void CApplicationClientDlg::OnInputClicked()
 
 	send_Buffer = nullptr;
 	delete[] send_Buffer;
+}
+
+
+void CApplicationClientDlg::OnBnClickedBrowser()
+{
+	try {
+		GetDlgItemText(IDC_URLL, URL_OUTPUT);
+		if (URL_OUTPUT.GetLength() == 0) {
+			return;
+		}
+		char browser[MAX_PATH];
+		HFILE h = _lcreat("dummy.html", 0);
+		_lclose(h);
+		FindExecutable("dummy.html", NULL, browser);
+		DeleteFile("dummy.html");
+
+		ShellExecute(NULL, "open", browser, URL_INPUT, NULL, 0);
+	}
+	catch (exception e) {
+		SetDlgItemText(IDC_URLS, "Input URL");
+	}
+
 }
