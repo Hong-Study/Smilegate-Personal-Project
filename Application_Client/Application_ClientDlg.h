@@ -34,4 +34,5 @@ private:
 	char recv_Buffer[10];
 public:
 	afx_msg void OnInputClicked();
+	afx_msg void OnBnClickedBrowser();
 };
