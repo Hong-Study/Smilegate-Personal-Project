@@ -123,13 +123,14 @@ void CApplicationClientDlg::OnBnClickedBrowser()
 		if (URL_OUTPUT.GetLength() == 0) {
 			return;
 		}
+
 		char browser[MAX_PATH];
 		HFILE h = _lcreat("dummy.html", 0);
 		_lclose(h);
 		FindExecutable("dummy.html", NULL, browser);
 		DeleteFile("dummy.html");
 
-		ShellExecute(NULL, "open", browser, URL_INPUT, NULL, 0);
+		ShellExecute(NULL, "open", browser, URL_OUTPUT, NULL, 0);
 	}
 	catch (exception e) {
 		SetDlgItemText(IDC_URLS, "Input URL");
