@@ -13,6 +13,9 @@
     <Filter Include="Lock">
       <UniqueIdentifier>{ca53acc4-eb93-4077-bde9-a5ab9907fa2b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Packet">
+      <UniqueIdentifier>{3d61dc02-188d-4a15-9ce2-b6ea0ff8307e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -47,6 +50,9 @@
     </ClCompile>
     <ClCompile Include="CoreGlobal.cpp">
       <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Packet.cpp">
+      <Filter>Packet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="CoreGlobal.h">
       <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>Packet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
