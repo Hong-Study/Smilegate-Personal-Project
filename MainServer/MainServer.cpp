@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-#include "DBConnector.h"
+//#include "DBConnector.h"
 
 class URLSession : public Session
 {
@@ -28,10 +28,10 @@ public:
 
 int main()
 {
-	/*ServerServiceRef service = make_shared<ServerService>(10);
+	ServerServiceRef service = make_shared<ServerService>(10);
 	service->SetFactory(make_shared< URLSession>);
 	service->SetIocpCore(make_shared<IocpCore>());
-	service->SetNetAddress(NetAddress(L"127.0.0.1", 5000));
+	service->SetNetAddress(NetAddress(L"127.0.0.1", 5005));
 
 	if (!service->Start())
 		HandleError("Start Error");
@@ -45,7 +45,5 @@ int main()
 			});
 	}
 
-	GThreadPool->Join();*/
-	DBConnector connect;
-
+	GThreadPool->Join();
 }

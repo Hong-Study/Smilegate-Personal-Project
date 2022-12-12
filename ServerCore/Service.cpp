@@ -5,9 +5,10 @@
 //Service::Service(ServiceType type, NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount)
 //	: _type(type), _netAddress(address), _iocpCore(core), _sessionFactory(factory), _maxSessionCount(maxSessionCount) {}
 
-Service::Service(int maxSessionCount)
-	: _maxSessionCount(maxSessionCount)
+Service::Service(ServiceType type, int maxSessionCount)
+	: _type(type), _maxSessionCount(maxSessionCount)
 {
+
 }
 
 Service::~Service()
@@ -45,6 +46,26 @@ void Service::ReleaseSession(SessionRef session)
 
 }
 
+ServerService::ServerService(int maxSessionCount)
+	:Service(ServiceType::Server, maxSessionCount) {}
+
+bool ServerService::Start()
+{
+	if (CanStart() == false) {
+		return false;
+	}
+	
+	_listener = make_shared<Listener>();
+	if (_listener == nullptr) {
+		return false;
+	}
+
+	if (_listener->StartAccept(static_pointer_cast<ServerService>(shared_from_this())) == false) {
+		return false;
+	}
+	return true;
+}
+
 void ServerService::SetFactory(SessionFactory factory)
 {
 	_sessionFactory = factory;
@@ -58,35 +79,7 @@ void ServerService::SetNetAddress(NetAddress address)
 void ServerService::SetIocpCore(IocpCoreRef core)
 {
 	_iocpCore = core;
-}
 
-//ServerService::ServerService(NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount)
-//	:Service(ServiceType::Server, address, core, factory, maxSessionCount)
-//{
-//
-//}
-
-ServerService::ServerService(int maxSessionCount)
-	:Service(maxSessionCount)
-{
-}
-
-bool ServerService::Start()
-{
-	if (CanStart() == false) {
-		return false;
-	}
-	
-	_listener = make_shared<Listener>();
-	if (_listener == nullptr) {
-		return false;
-	}
-	
-	if (_listener->StartAccept(static_pointer_cast<ServerService>(shared_from_this())) == false) {
-		return false;
-	}
-	
-	return true;
 }
 
 void ServerService::CloseService()

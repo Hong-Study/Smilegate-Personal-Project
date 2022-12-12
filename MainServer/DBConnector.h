@@ -1,5 +1,10 @@
 #pragma once
 
+#define DB_HOST "127.0.0.1"
+#define DB_USER "root"
+#define DB_PASS "Dignrnfjrl12!"
+#define DB_NAME "TestDB"
+
 class DBConnector
 {
 public:
@@ -16,4 +21,3 @@ private:
 	MYSQL_ROW sql_Row;
 	
 };
-

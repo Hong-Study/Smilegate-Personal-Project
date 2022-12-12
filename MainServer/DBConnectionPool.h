@@ -9,9 +9,10 @@ public:
 	~DBConnectionPool();
 
 public:
-	bool Find();
+	void Add_DB();
+	//bool Find(string url);
 	
 private:
-	vector<DBConnector> _connectorPool;
+	vector<DBConnector*> _connectorPool;
+	atomic<int> useCount;
 };
-

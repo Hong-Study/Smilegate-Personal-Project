@@ -37,7 +37,10 @@ bool Listener::StartAccept(ServerServiceRef service)
 	if (SocketUtils::Listen(_socket) == false)
 		return false;
 
+	cout << "3" << endl;
 	const int32 acceptCount = _service->GetMaxSessionCount();
+
+	
 
 	for (int32 i = 0; i < acceptCount; i++)
 	{
