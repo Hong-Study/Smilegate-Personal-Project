@@ -15,4 +15,4 @@ public:
 private:
 	vector<DBConnector*> _connectorPool;
 	atomic<int> useCount;
-};
+} dbConnectionPool;
