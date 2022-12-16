@@ -1,6 +1,7 @@
-#include <iostream>
-
 #include "pch.h"
+#include <iostream>
+#include <PKT_Maker.h>
+
 
 void HandleError(const char* cause)
 {
@@ -10,35 +11,20 @@ void HandleError(const char* cause)
 
 int main()
 {
-	WSAData wsaData;
-	if (::WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-		return 0;
+	PKT_Maker maker;
+	char str[] = "HelloWorld\0";
+	BYTE* byte = maker.MakePacket_URLMAPPING(str, strlen(str)+1);
+	int pos = 0;
+	BYTE* dest = new BYTE[sizeof(PKT_Header)];
+	memcpy(dest, &byte[0], sizeof(PKT_Header));
+	PKT_Header* head = reinterpret_cast<PKT_Header*>(&dest[pos]);
+	cout << "PKT_Header : " << head->pkt_Size << endl;
+	pos += sizeof(head);
 
-	SOCKET clientSocket = ::socket(AF_INET, SOCK_STREAM, 0);
-	if (clientSocket == INVALID_SOCKET)
-		return 0;
+	/*dest = new BYTE[head->pkt_Size];
+	memcpy(dest, &byte[pos], head->pkt_Size);*/
+	PKT_DATA* data = reinterpret_cast<PKT_DATA*>(&byte[pos]);
+	cout << data->url_length << endl;
 
-	/*u_long on = 1;
-	if (::ioctlsocket(clientSocket, FIONBIO, &on) == INVALID_SOCKET)
-		return 0;*/
-
-	SOCKADDR_IN serverAddr;
-	::memset(&serverAddr, 0, sizeof(serverAddr));
-	serverAddr.sin_family = AF_INET;
-	::inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
-	serverAddr.sin_port = ::htons(5000);
-	if (::connect(clientSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
-		cout << "접속 실패";
-	else
-		cout << "Connect 성공\n";
-	// Connect
-	while (true) {}
 	
-	
-
-	// 소켓 리소스 반환
-	::closesocket(clientSocket);
-
-	// 윈속 종료
-	::WSACleanup();
 }

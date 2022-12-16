@@ -51,7 +51,7 @@
     <ClCompile Include="CoreGlobal.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="Packet.cpp">
+    <ClCompile Include="PKT_Maker.cpp">
       <Filter>Packet</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,7 +95,7 @@
     <ClInclude Include="CoreGlobal.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="Packet.h">
+    <ClInclude Include="PKT_Maker.h">
       <Filter>Packet</Filter>
     </ClInclude>
   </ItemGroup>

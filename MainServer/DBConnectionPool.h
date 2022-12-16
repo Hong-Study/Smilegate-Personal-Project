@@ -1,7 +1,7 @@
 #pragma once
 
-class DBConnector;
-
+// 성능을 위해 방법 추가할 것.
+// DBMS
 class DBConnectionPool
 {
 public:
@@ -10,9 +10,13 @@ public:
 
 public:
 	void Add_DB();
-	//bool Find(string url);
-	
+	DBConnectorRef GetDBCppol();
+	void ReturnDBpool(DBConnectorRef db);
 private:
-	vector<DBConnector*> _connectorPool;
+	queue<DBConnectorRef> _connectorPool;
 	atomic<int> useCount;
-} dbConnectionPool;
+
+	SpinLock s;
+};
+
+extern DBConnectionPool* dbPool;
