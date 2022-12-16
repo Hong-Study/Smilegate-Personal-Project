@@ -1,13 +1,10 @@
 #include "pch.h"
 #include "CoreGlobal.h"
 #include "SocketUtils.h"
-#include "SpinLock.h"
-#include "ThreadPool.h"
 
 SpinLock spinLock;
 
 ThreadPool* GThreadPool = nullptr;
-
 class CoreGlobal {
 public:
 	CoreGlobal() {

@@ -30,8 +30,6 @@ private:
 	CString URL_INPUT;
 	CString URL_OUTPUT;
 	ClientNetwork* _socket;
-
-	char recv_Buffer[10];
 public:
 	afx_msg void OnInputClicked();
 	afx_msg void OnBnClickedBrowser();

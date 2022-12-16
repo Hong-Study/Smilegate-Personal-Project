@@ -28,6 +28,9 @@
     <ClCompile Include="DBConnectionPool.cpp">
       <Filter>DB</Filter>
     </ClCompile>
+    <ClCompile Include="URLSession.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -38,6 +41,12 @@
     </ClInclude>
     <ClInclude Include="DBConnectionPool.h">
       <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="URLSession.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Macro.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

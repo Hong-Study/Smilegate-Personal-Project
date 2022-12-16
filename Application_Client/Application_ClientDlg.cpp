@@ -22,7 +22,7 @@ CApplicationClientDlg::CApplicationClientDlg(CWnd* pParent /*=nullptr*/)
 	, URL_OUTPUT(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	_socket = new ClientNetwork(L"127.0.0.1", 5000);
+	_socket = new ClientNetwork(L"127.0.0.1", 5005);
 	if (!_socket->Connect())
 		exit(0);
 }
@@ -99,16 +99,12 @@ void CApplicationClientDlg::OnInputClicked()
 	GetDlgItemText(IDC_URLL, URL_INPUT);
 	int len = URL_INPUT.GetLength();
 	char* send_Buffer = new char[len+1];
-	ZeroMemory(recv_Buffer, 10);
 
 	send_Buffer = URL_INPUT.GetBuffer(0);
 	send_Buffer[len] = '\0';
 	_socket->Send(send_Buffer, len+1);
-
-	len = _socket->Recv(recv_Buffer);
-	recv_Buffer[len] = '\0';
-	URL_OUTPUT = recv_Buffer;
-
+	_socket->Recv();
+	URL_OUTPUT = _socket->getString();
 	SetDlgItemText(IDC_URLS, URL_OUTPUT);
 
 	send_Buffer = nullptr;

@@ -14,6 +14,8 @@ bool ClientNetwork::Init()
 ClientNetwork::ClientNetwork(wstring ip, short port)
 {
 	Init();
+	recvBuffer = new BYTE[100];
+	string = new char[30];
 	SetBind(ip, port);
 }
 
@@ -45,10 +47,34 @@ bool ClientNetwork::Connect()
 
 int ClientNetwork::Send(char* data, int len)
 {
-	return send(_socket, data, len, 0);
+	int size = sizeof(PKT_Header) + len;
+	//BYTE* byte = maker.MakePacket_URLMAPPING(data, len);
+	BYTE* byte = new BYTE[size];
+	PKT_Header* head = reinterpret_cast<PKT_Header*>(&byte[0]);
+	head->pkt_State = PKT_STATE::URL_MAPPING;
+	head->pkt_Size = len; 
+	memcpy(&byte[sizeof(PKT_Header)], data, len);
+
+	int strlen =  send(_socket, (CHAR*)byte, size, 0);
+	delete[] byte;
+
+	return strlen;
 }
 
-int ClientNetwork::Recv(char* buf)
+char* ClientNetwork::getString()
 {
-	return recv(_socket, buf, 100, 0);
+	return string;
+}
+
+int ClientNetwork::Recv()
+{
+	ZeroMemory(string, 30);
+	ZeroMemory(recvBuffer, 100);
+
+	int len = recv(_socket, (char*)recvBuffer, 100, 0);
+	PKT_Header* head = reinterpret_cast<PKT_Header*>(&recvBuffer[0]);
+	
+	memcpy(string, &recvBuffer[sizeof(PKT_Header)], head->pkt_Size);
+
+	return len;
 }
