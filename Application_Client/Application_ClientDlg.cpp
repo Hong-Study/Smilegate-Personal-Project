@@ -88,7 +88,7 @@ void CApplicationClientDlg::OnPaint()
 }
 
 // 사용자가 최소화된 창을 끄는 동안에 커서가 표시되도록 시스템에서
-//  이 함수를 호출합니다.
+// 이 함수를 호출합니다.
 HCURSOR CApplicationClientDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
@@ -119,6 +119,7 @@ void CApplicationClientDlg::OnBnClickedBrowser()
 		if (URL_OUTPUT.GetLength() == 0) {
 			return;
 		}
+		//오류 체크 넣어줘야함.
 
 		char browser[MAX_PATH];
 		HFILE h = _lcreat("dummy.html", 0);

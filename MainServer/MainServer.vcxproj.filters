@@ -7,18 +7,14 @@
     <Filter Include="Hashing">
       <UniqueIdentifier>{411dae81-572e-4a80-a18d-7c90c51ea2c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Main">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{753e6f36-ceb8-4bfe-84ff-33dd589d4dc3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Mains">
+      <UniqueIdentifier>{a69ff557-9178-4f57-85f8-fd563703191c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MainServer.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -28,8 +24,14 @@
     <ClCompile Include="DBConnectionPool.cpp">
       <Filter>DB</Filter>
     </ClCompile>
+    <ClCompile Include="ShortAlgorightm.cpp">
+      <Filter>Hashing</Filter>
+    </ClCompile>
+    <ClCompile Include="MainServer.cpp">
+      <Filter>Mains</Filter>
+    </ClCompile>
     <ClCompile Include="URLSession.cpp">
-      <Filter>Main</Filter>
+      <Filter>Mains</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -42,11 +44,14 @@
     <ClInclude Include="DBConnectionPool.h">
       <Filter>DB</Filter>
     </ClInclude>
-    <ClInclude Include="URLSession.h">
-      <Filter>Main</Filter>
-    </ClInclude>
     <ClInclude Include="Macro.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ShortAlgorightm.h">
+      <Filter>Hashing</Filter>
+    </ClInclude>
+    <ClInclude Include="URLSession.h">
+      <Filter>Mains</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

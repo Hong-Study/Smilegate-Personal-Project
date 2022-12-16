@@ -17,6 +17,7 @@ int32 URLSession::OnRecv(BYTE* buffer, int32 len)
 	memcpy(string, &buffer[sizeof(PKT_Header)], head->pkt_Size);
 
 	cout << "Recv data : " << string << "\n\n";
+
 	//DBConnectorRef db = nullptr;
 	//{
 	//	//spinLock 변경해야함.
