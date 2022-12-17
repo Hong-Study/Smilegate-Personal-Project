@@ -14,5 +14,6 @@
 
 #include <pch.h>
 #include <mysql.h>
+#include <vector>
 #include "Macro.h"
 #include "DBConnectionPool.h"

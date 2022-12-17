@@ -33,6 +33,9 @@
     <ClCompile Include="URLSession.cpp">
       <Filter>Mains</Filter>
     </ClCompile>
+    <ClCompile Include="KISA_SHA256.c">
+      <Filter>Hashing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -52,6 +55,9 @@
     </ClInclude>
     <ClInclude Include="URLSession.h">
       <Filter>Mains</Filter>
+    </ClInclude>
+    <ClInclude Include="KISA_SHA256.h">
+      <Filter>Hashing</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

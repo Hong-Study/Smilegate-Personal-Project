@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "URLSession.h"
+#include "ShortAlgorightm.h"
 
 int main()
 {
@@ -10,8 +11,10 @@ int main()
 
 	if (!service->Start())
 		HandleError("Start Error");
+	string str = "12315";
+	ShortAlgorightm::convTest(str.c_str(), str.length());
 
-	for (int i = 0; i < THREAD_SIZE; i++) {
+	/*for (int i = 0; i < THREAD_SIZE; i++) {
 		GThreadPool->enqueue([=]()
 			{
 				while (true) {
@@ -19,7 +22,7 @@ int main()
 				}
 			});
 	}
-	GThreadPool->Join();
+	GThreadPool->Join();*/
 
-	delete dbPool;
+	//delete dbPool;
 }
