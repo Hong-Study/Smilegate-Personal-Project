@@ -1,73 +1,90 @@
 #include "pch.h"
 #include <iostream>
-#include <algorithm>
-#include <string>
-#include <cstdlib>
-
+#include <stack>
+#include <map>
+#include <unordered_map>
+#include <sstream>
 using namespace std;
+#define NUM_SYMBOLS 6
 
-/**
- * id_to_short_url takes an input ID and produces a short URL suffix.
- *
- * Base-62 encodes the identifier.
- */
-string id_to_short_url(unsigned int n) {
-    // Mapping which defines the 62 possible output characters.
-    char map[] = "abcdefghijklmnopqrstuvwxyzABCDEF"
-        "GHIJKLMNOPQRSTUVWXYZ0123456789";
+class Solution {
+    const string domain = "http://tinyurl.com/";
+    unordered_map<string, string> orig_to_base62, base62_to_orig;
 
-    string short_url;
+    string decimalToBase62(int decimal) {
+        stack<char> stack;
+        int i, base10;
+        char base62;
+        string base62_full;
 
-    // Convert given ID to a base-62 number.
-    while (n) {
-        // Append each character mapped by the remainder.
-        short_url.push_back(map[n % 62]);
-        n /= 62;
+        for (i = decimal; i > 0; i /= 62) {
+            base10 = i % 62;
+            if (base10 >= 0 && base10 < 10) {
+                // 0-9
+                base62 = base10 + 48;
+            }
+            else if (base10 >= 10 && base10 < 36) {
+                // A-Z
+                base62 = base10 - 10 + 65;
+            }
+            else {
+                // a-z
+                base62 = base10 - 36 + 97;
+            }
+
+            stack.push(base62);
+        }
+
+        while (stack.size() < NUM_SYMBOLS) {
+            stack.push('0');
+        }
+
+        while (!stack.empty()) {
+            base62_full.push_back(stack.top());
+            stack.pop();
+        }
+
+        return base62_full;
     }
 
-    // Reverse the string to complete the base conversion.
-    reverse(short_url.begin(), short_url.end());
+public:
 
-    return short_url;
-}
+    // Encodes a URL to a shortened URL.
+    string encode(string longUrl) {
+        stringstream ss;
+        string base62;
 
-/**
- * short_url_to_id converts a short URL into the corresponding ID.
- *
- * Base-62 decodes the input string.
- */
-__int64 short_url_to_id(string short_url) {
-    __int64 id = 0;
+        if (orig_to_base62.find(longUrl) != orig_to_base62.end()) {
+            base62 = orig_to_base62[longUrl];
+        }
+        else {
+            base62 = decimalToBase62(orig_to_base62.size());
 
-    // Base decode conversion logic.
-    for (__int64 i = 0; i < short_url.length(); ++i) {
-        if ('a' <= short_url[i] && short_url[i] <= 'z') {
-            id = id * 62 + short_url[i] - 'a';
+            orig_to_base62[longUrl] = base62;
+            base62_to_orig[base62] = longUrl;
         }
-        if ('A' <= short_url[i] && short_url[i] <= 'Z') {
-            id = id * 62 + short_url[i] - 'A' + 26;
-        }
-        if ('0' <= short_url[i] && short_url[i] <= '9') {
-            id = id * 62 + short_url[i] - '0' + 52;
-        }
+
+        ss << domain << base62;
+
+        return ss.str();
     }
-    return id;
-}
+
+    // Decodes a shortened URL to its original URL.
+    string decode(string shortUrl) {
+        string base62, orig;
+
+        base62 = shortUrl.substr(domain.length());
+        if (base62_to_orig.find(base62) != base62_to_orig.end()) {
+            orig = base62_to_orig[base62];
+        }
+
+        return orig;
+    }
+};
 
 int main() {
-    __int64 n = 100000000000;
-
-    if (n <= 0) {
-        cerr << "error: invalid input value, an integer greater than 0 is required" << endl;
-        return 1;
-    }
-
-    cout << "Input ID: " << n << endl << "---" << endl;
-
-    string encoded_short_url = id_to_short_url(n);
-    unsigned int decoded_id = short_url_to_id(encoded_short_url);
-
-    cout << "Generated short URL: " << encoded_short_url << endl;
-    cout << "ID decoded from URL: " << decoded_id << endl;
-    return 0;
+    Solution solution;
+    string s = solution.encode("https://ajslkdfjlasjdflasjdfjalsjflsadjlfljas");
+    cout << s << endl;
+    cout << solution.decode(s) << endl;
 }

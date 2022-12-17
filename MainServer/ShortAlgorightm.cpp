@@ -1,18 +1,21 @@
 #include "pch.h"
 #include "ShortAlgorightm.h"
+#include "KISA_SHA256.h"
 
-string ShortAlgorightm::convIDtoURL(const char* str, int n) {
-
-    // Char array having all chars (A to Z), (a to z) and (0 to 9)
-    char alphaMap[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef"
-        "ghijklmnopqrstuvwxyz0123456789";
+char ShortAlgorightm::alphaMap[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+string ShortAlgorightm::convIDtoURL(int str[]) {
     string url;
-    while (n > 0) {
-        // converting urlID to url
-        url.push_back(alphaMap[n % 62]);
-        n /= 62;
+    int n = 0;
+    for (int i = 1; i <= 7; i++) {
+        n = 0;
+        n += str[(i * 6) - 6] * 1;
+        n += str[(i * 6) - 5] * 2;
+        n += str[(i * 6) - 4] * 4;
+        n += str[(i * 6) - 3] * 8;
+        n += str[(i * 6) - 2] * 16;
+        n += str[(i * 6) - 1] * 32;
+        url.push_back(alphaMap[n]);
     }
-    reverse(url.begin(), url.end());
     return url;
 }
 
@@ -31,4 +34,25 @@ int ShortAlgorightm::convURLtoID(string shortURL) {
             urlID = urlID * 62 + shortURL[i] - '0' + 52;
     }
     return urlID;
+}
+
+string ShortAlgorightm::convTest(const char* str, int len)
+{
+    BYTE* dest = new BYTE[32];
+    SHA256_Encrpyt((BYTE*)str, len, dest);
+    int tmp[42] = { 0, };
+    int pos = 0;
+    for (int i = 0; i < 5; i++) {
+        pos = (i+1) * 8;
+        cout << (int)dest[i] << " ";
+        while (dest[i] != 0) {
+            tmp[--pos] = (int)dest[i] % 2;
+            dest[i] /= 2;
+        }
+    }
+    cout << endl;
+    delete[] dest;
+    string a = convIDtoURL(tmp);
+    cout << a << endl;
+    return a;
 }
