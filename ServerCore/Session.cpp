@@ -17,14 +17,13 @@ void Session::Send(BYTE* buffer, int32 len)
 	SendEvent* sendEvent = new SendEvent();
 	sendEvent->owner = shared_from_this();
 	sendEvent->buffer.resize(len);
-	memcpy(sendEvent->buffer.data(), buffer, len);
 
+	memcpy(sendEvent->buffer.data(), buffer, len);
 	{
 		// 중첩 관리 -> 후에 고치기
 		lock_guard<SpinLock> guard(spinLock);
 		RegisterSend(sendEvent);
 	}
-	
 }
 
 void Session::DisConnect(const WCHAR* cause)

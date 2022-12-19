@@ -12,7 +12,7 @@ using namespace std;
 class ClientNetwork
 {
 public:
-	ClientNetwork(wstring ip, short port);
+	ClientNetwork();
 	~ClientNetwork();
 
 	bool Connect();
@@ -20,7 +20,7 @@ public:
 	int Send(string data, int n);
 	std::string getString();
 
-private:
+public:
 	void SetBind(wstring ip, short port);
 	bool Init();
 	void Clear();

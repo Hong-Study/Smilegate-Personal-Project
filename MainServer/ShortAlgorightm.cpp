@@ -36,7 +36,7 @@ int ShortAlgorightm::convURLtoID(string shortURL) {
     return urlID;
 }
 
-string ShortAlgorightm::convTest(const char* str, int len)
+string ShortAlgorightm::convURLtoShort(const char* str, int len)
 {
     BYTE* dest = new BYTE[32];
     SHA256_Encrpyt((BYTE*)str, len, dest);
@@ -44,15 +44,12 @@ string ShortAlgorightm::convTest(const char* str, int len)
     int pos = 0;
     for (int i = 0; i < 5; i++) {
         pos = (i+1) * 8;
-        cout << (int)dest[i] << " ";
         while (dest[i] != 0) {
             tmp[--pos] = (int)dest[i] % 2;
             dest[i] /= 2;
         }
     }
-    cout << endl;
     delete[] dest;
     string a = convIDtoURL(tmp);
-    cout << a << endl;
     return a;
 }

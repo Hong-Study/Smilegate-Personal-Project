@@ -30,6 +30,7 @@ private:
 	CString URL_INPUT;
 	CString URL_OUTPUT;
 	ClientNetwork* _socket;
+	
 public:
 	afx_msg void OnInputClicked();
 	afx_msg void OnBnClickedBrowser();
