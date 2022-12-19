@@ -5,9 +5,11 @@
 #ifdef _DEBUG
 #pragma comment(lib, "Debug\\ServerCore.lib")
 #pragma comment(lib, "libmySQL.lib")
+#pragma warning(disable:4996)
 #else
 #pragma comment(lib, "Release\\ServerCore.lib")
 #pragma comment(lib, "libmySQL.lib")
+#pragma warning(disable:4996)
 #endif
 
 #define THREAD_SIZE 10

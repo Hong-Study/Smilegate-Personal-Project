@@ -2,8 +2,9 @@
 
 #pragma pack(1)
 enum class PKT_STATE {
-	URL_INPUT
+	URL_MAKING
 	, URL_MAPPING
+	, URL_ERROR
 };
 
 struct PKT_Header {
@@ -21,7 +22,7 @@ struct PKT_DATA {
 };
 #pragma pack()
 
-// 멀티스레에 맞게 바꿔야함.
+// 고쳐야된다 -> 메모리 풀을 구현하여 할당하는 시간을 최소화하기.
 class PKT_Maker
 {
 public:

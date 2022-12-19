@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "URLSession.h"
+#include "ShortAlgorightm.h"
+#include "DBConnectionPool.h"
+#include "DBConnector.h"
 
 void URLSession::OnConnected()
 {
@@ -8,33 +11,79 @@ void URLSession::OnConnected()
 
 int32 URLSession::OnRecv(BYTE* buffer, int32 len)
 {
-	// Echo
-	//cout << "OnRecv data = " << (char*)buffer << "(" << len << ")" << endl;
+	if (len < sizeof(PKT_Header)) {
+		cout<<"Recv Size Error"<<endl;
+		return 0;
+	}
+
+	head = reinterpret_cast<PKT_Header*>(&buffer[0]);
 	
-	PKT_Header* head = reinterpret_cast<PKT_Header*>(&buffer[0]);
-	cout << "Recv Len : " << len << " pkt : " << head->pkt_Size << endl;
-	char* string = new char[head->pkt_Size];
-	memcpy(string, &buffer[sizeof(PKT_Header)], head->pkt_Size);
-
-	cout << "Recv data : " << string << "\n\n";
-
-	//DBConnectorRef db = nullptr;
-	//{
-	//	//spinLock 변경해야함.
-	//	lock_guard<SpinLock> gaurd(spinLock);
-	//	while (1) {
-	//		db = dbPool->GetDBCppol();
-	//		if (db == nullptr)
-	//			continue;
-	//		break;
-	//	}
-	//}
-
-	Send(buffer, len);
+	if (head->pkt_State == PKT_STATE::URL_MAKING) {
+		HANDLE_URL_MAKING(buffer, head->pkt_Size);
+	}
+	else {
+		HANDLE_URL_MAPPING(buffer, head->pkt_Size);
+	}
 	return len;
 }
 
 void URLSession::OnSend(int32 len)
 {
 	cout << "OnSend Len = " << len << endl;
+}
+
+void URLSession::HANDLE_URL_MAKING(BYTE* buffer, int32 len)
+{
+	char* str = new char[len];
+	memcpy(str, &buffer[sizeof(PKT_Header)], len);
+	cout << str << " : " << len << endl;
+	string s = ShortAlgorightm::convURLtoShort(str, len);
+	cout << s << endl;
+	head->pkt_Size = s.length();
+	memcpy(&buffer[sizeof(PKT_Header)], (BYTE*)s.data(), s.length());
+	
+	while (1) {
+		dbConector = dbPool->GetDBCppol();
+		if (dbConector == nullptr)
+			continue;
+		break;
+	}
+	//TODO
+	if (dbConector->MappingURL(s) == nullptr) {
+		dbConector->InsertURL(str, s);
+	}
+	//
+	delete[] str;
+	Send(buffer, s.length() + sizeof(PKT_Header));
+	dbPool->ReturnDBpool(dbConector);
+	dbConector = nullptr;
+}
+
+void URLSession::HANDLE_URL_MAPPING(BYTE* buffer, int32 len)
+{
+	char* str = new char[len];
+	memcpy(str, &buffer[sizeof(PKT_Header)], len);
+	string s = ShortAlgorightm::convURLtoShort(str, len);
+
+	dbConector = nullptr;
+	while (1) {
+		dbConector = dbPool->GetDBCppol();
+		if (dbConector == nullptr)
+			continue;
+		break;
+	}
+	//TODO
+	char* urlL;
+	if ((urlL = dbConector->MappingURL(s.c_str())) == nullptr) {
+		head->pkt_State = PKT_STATE::URL_ERROR;
+		Send(buffer, sizeof(PKT_Header));
+	}
+	memcpy(&buffer[sizeof(PKT_Header)], (BYTE*)urlL, strlen(urlL));
+	head->pkt_Size = strlen(urlL);
+	Send(buffer, sizeof(PKT_Header) + strlen(urlL));
+	//
+
+	delete[] str;
+	dbPool->ReturnDBpool(dbConector);
+	dbConector = nullptr;
 }

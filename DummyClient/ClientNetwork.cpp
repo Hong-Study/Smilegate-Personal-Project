@@ -11,12 +11,11 @@ bool ClientNetwork::Init()
 	return INVALID_SOCKET != _socket;
 }
 
-ClientNetwork::ClientNetwork(wstring ip, short port)
+ClientNetwork::ClientNetwork()
 {
 	Init();
 	recvBuffer = new BYTE[100];
 	str = new char[100];
-	SetBind(ip, port);
 }
 
 ClientNetwork::~ClientNetwork()
