@@ -36,9 +36,8 @@ void URLSession::HANDLE_URL_MAKING(BYTE* buffer, int32 len)
 {
 	char* str = new char[len];
 	memcpy(str, &buffer[sizeof(PKT_Header)], len);
-	cout << str << " : " << len << endl;
 	string s = ShortAlgorightm::convURLtoShort(str, len);
-	cout << s << endl;
+
 	head->pkt_Size = s.length();
 	memcpy(&buffer[sizeof(PKT_Header)], (BYTE*)s.data(), s.length());
 	
@@ -51,10 +50,9 @@ void URLSession::HANDLE_URL_MAKING(BYTE* buffer, int32 len)
 	//TODO
 	if (dbConector->MappingURL(s) == nullptr) {
 		dbConector->InsertURL(str, s);
-	}
+	}else Send(buffer, s.length() + sizeof(PKT_Header));
 	//
 	delete[] str;
-	Send(buffer, s.length() + sizeof(PKT_Header));
 	dbPool->ReturnDBpool(dbConector);
 	dbConector = nullptr;
 }
@@ -65,7 +63,6 @@ void URLSession::HANDLE_URL_MAPPING(BYTE* buffer, int32 len)
 	memcpy(str, &buffer[sizeof(PKT_Header)], len);
 	string s = ShortAlgorightm::convURLtoShort(str, len);
 
-	dbConector = nullptr;
 	while (1) {
 		dbConector = dbPool->GetDBCppol();
 		if (dbConector == nullptr)
@@ -73,14 +70,16 @@ void URLSession::HANDLE_URL_MAPPING(BYTE* buffer, int32 len)
 		break;
 	}
 	//TODO
-	char* urlL;
+	char* urlL = nullptr;
 	if ((urlL = dbConector->MappingURL(s.c_str())) == nullptr) {
 		head->pkt_State = PKT_STATE::URL_ERROR;
 		Send(buffer, sizeof(PKT_Header));
 	}
-	memcpy(&buffer[sizeof(PKT_Header)], (BYTE*)urlL, strlen(urlL));
-	head->pkt_Size = strlen(urlL);
-	Send(buffer, sizeof(PKT_Header) + strlen(urlL));
+	else {
+		memcpy(&buffer[sizeof(PKT_Header)], (BYTE*)urlL, strlen(urlL));
+		head->pkt_Size = strlen(urlL);
+		Send(buffer, sizeof(PKT_Header) + strlen(urlL));
+	}
 	//
 
 	delete[] str;

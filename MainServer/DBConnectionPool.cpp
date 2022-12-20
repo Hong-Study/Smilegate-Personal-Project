@@ -7,19 +7,9 @@ DBConnectionPool* dbPool = new DBConnectionPool;
 DBConnectionPool::DBConnectionPool()
 {
 	for (int i = 0; i < 10; i++) {
-		_connectorPool.emplace(make_shared<DBConnector>());
+		_connectorPool.emplace(make_shared<DBConnector>(i));
 	}
 	useCount.store(0);
-}
-
-DBConnectionPool::~DBConnectionPool()
-{
-
-}
-
-void DBConnectionPool::Add_DB()
-{
-	_connectorPool.emplace(make_shared<DBConnector>());
 }
 
 DBConnectorRef DBConnectionPool::GetDBCppol()

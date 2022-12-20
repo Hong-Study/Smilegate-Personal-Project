@@ -31,7 +31,7 @@ private:
 	SOCKADDR_IN _address;
 	PKT_Maker maker;
 
-	BYTE* recvBuffer;
+	vector<BYTE> recvBuffer;
 	char* str;
 	bool h;
 
