@@ -17,7 +17,7 @@
 
 ## 아키텍처
 - 초기 아키텍처
-![image](Smilegate-Personal-Project/img/캡처.PNG)
+![image](img/캡처.PNG)
 
 - 수정 아키텍처
 
