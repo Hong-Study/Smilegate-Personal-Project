@@ -43,13 +43,14 @@ bool DBConnector::InsertURL(string urlL, string urlS)
 char* DBConnector::MappingURL(string url)
 {
 	//Äõ¸®¹® ½ÇÇà
-	sprintf(sql, "SELECT URLLONG FROM urltable WHERE URLSHORT = '%s'", url.c_str());
+	sprintf(sql, "SELECT * FROM urltable WHERE URLSHORT='%s'", url.c_str());
+	cout << sql << endl;
 	if (mysql_query(s_Connection, sql) != 0)
 		return nullptr;
 	sql_Result = mysql_store_result(s_Connection);
 	if((sql_Row = mysql_fetch_row(sql_Result)) == NULL)
 		return nullptr;
-
+	cout << sql_Row[0] << " : " << sql_Row[1] << endl;
 	mysql_free_result(sql_Result);
 	cout << "Mapping Success" << endl;
 

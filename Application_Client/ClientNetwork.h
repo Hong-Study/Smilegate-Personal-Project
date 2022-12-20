@@ -18,14 +18,16 @@ public:
 	bool Connect();
 	int Recv();
 	int Send(string data, int n);
-	std::string getString();
+	string getUrlString();
+	string getNormalString();
+	bool IsCheck(string data);
 
 private:
 	void SetBind(wstring ip, short port);
 	bool Init();
 	void Clear();
 	bool IsHttp(string& data);
-
+	
 private:
 	SOCKET _socket;
 	SOCKADDR_IN _address;
@@ -37,5 +39,6 @@ private:
 private:
 	string http = "http://";
 	string https = "https://";
+	string myurl = "Hong.co.kr/";
 };
 

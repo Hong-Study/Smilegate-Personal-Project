@@ -108,7 +108,7 @@ void CApplicationClientDlg::OnInputClicked()
 	}
 	_socket->Recv();
 
-	URL_OUTPUT = _socket->getString().c_str();
+	URL_OUTPUT = _socket->getUrlString().c_str();
 	SetDlgItemText(IDC_URLS, URL_OUTPUT);
 
 	send_Buffer = nullptr;
@@ -119,27 +119,36 @@ void CApplicationClientDlg::OnInputClicked()
 void CApplicationClientDlg::OnBnClickedBrowser()
 {
 	try {
-		GetDlgItemText(IDC_URLL, URL_OUTPUT);
-		if (URL_OUTPUT.GetLength() == 0) {
+		GetDlgItemText(IDC_URLL, URL_INPUT);
+		if (URL_INPUT.GetLength() == 0) {
 			return;
 		}
 		int len = URL_INPUT.GetLength();
 		char* send_Buffer = new char[len + 1];
-
 		send_Buffer = URL_INPUT.GetBuffer(0);
 		send_Buffer[len] = '\0';
-		if(_socket->Send(send_Buffer, 1) == -1)
-			return;
-		_socket->Recv();
-		//오류 체크 넣어줘야함.
 
+		if (_socket->IsCheck(send_Buffer)) {
+			if (_socket->Send(send_Buffer, 1) == -1)
+				return;
+			if (_socket->Recv() == -1) {
+				SetDlgItemText(IDC_URLS, "Error");
+				return;
+			}
+			//오류 체크 넣어줘야함
+			URL_OUTPUT = _socket->getNormalString().c_str();
+		}
+		else {
+			URL_OUTPUT = URL_INPUT;
+		}
 		char browser[MAX_PATH];
 		HFILE h = _lcreat("dummy.html", 0);
 		_lclose(h);
 		FindExecutable("dummy.html", NULL, browser);
 		DeleteFile("dummy.html");
 
-		ShellExecute(NULL, "open", browser, _socket->getString().c_str(), NULL, 0);
+		SetDlgItemText(IDC_URLS, URL_OUTPUT);
+		ShellExecute(NULL, "open", browser, URL_OUTPUT, NULL, 0);
 	}
 	catch (exception e) {
 		SetDlgItemText(IDC_URLS, "Input URL");

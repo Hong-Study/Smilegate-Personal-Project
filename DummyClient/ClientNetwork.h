@@ -29,7 +29,6 @@ public:
 private:
 	SOCKET _socket;
 	SOCKADDR_IN _address;
-	PKT_Maker maker;
 
 	vector<BYTE> recvBuffer;
 	char* str;
