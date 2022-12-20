@@ -19,23 +19,6 @@ string ShortAlgorightm::convIDtoURL(int str[]) {
     return url;
 }
 
-int ShortAlgorightm::convURLtoID(string shortURL) {
-    int urlID = 0;
-    for (int i = 0; i < shortURL.length(); i++) {
-        // if char is in between A and Z
-        if ('A' <= shortURL[i] && shortURL[i] <= 'Z')
-            urlID = urlID * 62 + shortURL[i] - 'A';
-        // if char is in between a and z (till 26 we have A to Z)
-        if ('a' <= shortURL[i] && shortURL[i] <= 'z')
-            urlID = urlID * 62 + shortURL[i] - 'a' + 26;
-
-        // if char is in between 0 and 9 (till 52 we have a to b)
-        if ('0' <= shortURL[i] && shortURL[i] <= '9')
-            urlID = urlID * 62 + shortURL[i] - '0' + 52;
-    }
-    return urlID;
-}
-
 string ShortAlgorightm::convURLtoShort(const char* str, int len)
 {
     BYTE* dest = new BYTE[32];

@@ -102,7 +102,7 @@ void CApplicationClientDlg::OnInputClicked()
 
 	send_Buffer = URL_INPUT.GetBuffer(0);
 	send_Buffer[len] = '\0';
-	if (_socket->Send(send_Buffer, 0) == -1) {
+	if (!_socket->IsCheck(send_Buffer) && (_socket->Send(send_Buffer, 0) == -1)) {
 		SetDlgItemText(IDC_URLS, "올바른 URL을 입력해주세요.");
 		return;
 	}
@@ -127,7 +127,7 @@ void CApplicationClientDlg::OnBnClickedBrowser()
 		char* send_Buffer = new char[len + 1];
 		send_Buffer = URL_INPUT.GetBuffer(0);
 		send_Buffer[len] = '\0';
-
+		//만약 short일 경우 long 받아오고 아니면 그냥 실행.
 		if (_socket->IsCheck(send_Buffer)) {
 			if (_socket->Send(send_Buffer, 1) == -1)
 				return;
