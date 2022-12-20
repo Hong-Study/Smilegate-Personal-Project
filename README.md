@@ -186,9 +186,12 @@ string ShortAlgorightm::convURLtoShort(const char* str, int len)
 
 ## 코드 중 확인 받고 싶은 부분
 - [URLSession.cpp](MainServer/URLSession.cpp)
-	- Server에서 URLSession에서 패킷 생성하는 부분이 있는데
+	- Server에서 URLSession에서 패킷 생성하는 부분이 있는데 본 코드처럼 생성해도 괜찮은지, 오류가 발생할 수 있다면 어떠한 오류가 발생할 수 있는지 확인받고 싶습니다.
+- [DBConnector.cpp](MainServer/DBConnector.cpp)
+	- 단순하게 sql문을 때려박고, 로드밸런서 부분도 반 나눠서 접속하게 하였는데, 이런식으로 구현하여도 괜찮은지 확인받고 싶습니다.
+- 
 
 
 ## 개발관련 과정에서 궁금했던 부분
 - 실제로 메모리 풀을 구현하는게 속도 부분에서 좀 더 빠른지?
-- IOCP 코어 개발할 때,
+- IOCP 코어 개발할 때, 
