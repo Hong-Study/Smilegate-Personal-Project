@@ -14,12 +14,13 @@ bool ClientNetwork::Init()
 ClientNetwork::ClientNetwork()
 {
 	Init();
-	recvBuffer = new BYTE[100];
+	recvBuffer.resize(100);
 	str = new char[100];
 }
 
 ClientNetwork::~ClientNetwork()
 {
+	delete[] str;
 	Clear();
 }
 
@@ -102,9 +103,9 @@ string ClientNetwork::getString()
 int ClientNetwork::Recv()
 {
 	ZeroMemory(str, 100);
-	ZeroMemory(recvBuffer, 100);
+	recvBuffer.clear();
 
-	int len = recv(_socket, (char*)recvBuffer, 100, 0);
+	int len = recv(_socket, (char*)recvBuffer.data(), 100, 0);
 	PKT_Header* head = reinterpret_cast<PKT_Header*>(&recvBuffer[0]);
 	
 	memcpy(str, &recvBuffer[sizeof(PKT_Header)], head->pkt_Size);
