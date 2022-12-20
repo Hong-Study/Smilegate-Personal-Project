@@ -157,7 +157,8 @@ string ShortAlgorightm::convURLtoShort(const char* str, int len)
 		SetDlgItemText(IDC_URLS, "Input URL");
 	}
 
-}```
+}
+```
 
 ## 작동 화면
 
