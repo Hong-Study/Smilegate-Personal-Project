@@ -82,6 +82,7 @@ extern DBConnectionPool* dbPool;
 }```
 
 ### 3. ShortAlgorightm 구현
+- SHA256 알고리즘으로 해쉬값을 얻은 후, 얻은 해쉬값의 5자리를 비트로 변환 후 Base62로 인코딩.
 ```char ShortAlgorightm::alphaMap[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 string ShortAlgorightm::convIDtoURL(int str[]) {
     string url;
