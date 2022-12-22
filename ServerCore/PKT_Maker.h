@@ -19,6 +19,7 @@ struct PKT_DATA {
 		url_String = const_cast<char*>(url);
  		url_length = length;
 	}
+	
 };
 #pragma pack()
 

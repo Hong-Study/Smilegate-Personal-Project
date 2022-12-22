@@ -14,13 +14,20 @@ bool ClientNetwork::Init()
 ClientNetwork::ClientNetwork()
 {
 	Init();
-	recvBuffer.resize(100);
+	recvBuffer = new BYTE[100];
 	str = new char[100];
+}
+
+ClientNetwork::ClientNetwork(wstring ip, short port)
+{
+	Init();
+	recvBuffer = new BYTE[100];
+	str = new char[100];
+	SetBind(ip, port);
 }
 
 ClientNetwork::~ClientNetwork()
 {
-	delete[] str;
 	Clear();
 }
 
@@ -35,17 +42,27 @@ bool ClientNetwork::IsHttp(string& data)
 		return false;
 	else if (data.compare(https) == 0)
 		return false;
+	else if (data.compare(0, (https.length()+myurl.length()), (https+myurl)) == 0) {
+		data = data.substr((https.length()+myurl.length()), data.length());
+		return true;
+	}
 	else if (data.compare(0, http.length(), http) == 0) {
 		data = data.substr(http.length(), data.length());
-		h = true;
 		return true;
 	}
 	else if (data.compare(0, https.length(), https) == 0) {
 		data = data.substr(https.length(), data.length());
-		h = false;
 		return true;
 	}
 
+	return false;
+}
+
+bool ClientNetwork::IsCheck(string data)
+{
+	int len = (https.length() + myurl.length());
+	if (data.length() >= len && ((data.compare(0, len, (https + myurl)) == 0)))
+		return true;
 	return false;
 }
 
@@ -93,21 +110,23 @@ int ClientNetwork::Send(string data, int n)
 	return strlen;
 }
 
-string ClientNetwork::getString()
+string ClientNetwork::getUrlString()
 {
-	if (h)
-		return http + str;
+	return https + "Hong.co.kr/" + str;
+}
+string ClientNetwork::getNormalString() {
 	return https + str;
 }
 
 int ClientNetwork::Recv()
 {
 	ZeroMemory(str, 100);
-	recvBuffer.clear();
+	ZeroMemory(recvBuffer, 100);
 
-	int len = recv(_socket, (char*)recvBuffer.data(), 100, 0);
+	int len = recv(_socket, (char*)recvBuffer, 100, 0);
 	PKT_Header* head = reinterpret_cast<PKT_Header*>(&recvBuffer[0]);
-	
+	if (head->pkt_State == PKT_STATE::URL_ERROR)
+		return -1;
 	memcpy(str, &recvBuffer[sizeof(PKT_Header)], head->pkt_Size);
 
 	return len;

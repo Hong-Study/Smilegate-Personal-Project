@@ -9,7 +9,6 @@ DBConnectionPool::DBConnectionPool()
 	for (int i = 0; i < 10; i++) {
 		_connectorPool.emplace(make_shared<DBConnector>(i));
 	}
-	useCount.store(0);
 }
 
 DBConnectorRef DBConnectionPool::GetDBCppol()

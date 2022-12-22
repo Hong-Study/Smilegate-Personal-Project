@@ -13,29 +13,33 @@ class ClientNetwork
 {
 public:
 	ClientNetwork();
+	ClientNetwork(wstring ip, short port);
 	~ClientNetwork();
 
 	bool Connect();
 	int Recv();
 	int Send(string data, int n);
-	std::string getString();
-
-public:
+	string getUrlString();
+	string getNormalString();
+	bool IsCheck(string data);
 	void SetBind(wstring ip, short port);
+private:
+	
 	bool Init();
 	void Clear();
 	bool IsHttp(string& data);
-
+	
 private:
 	SOCKET _socket;
 	SOCKADDR_IN _address;
 
-	vector<BYTE> recvBuffer;
+	BYTE* recvBuffer;
 	char* str;
 	bool h;
 
 private:
 	string http = "http://";
 	string https = "https://";
+	string myurl = "Hong.co.kr/";
 };
 

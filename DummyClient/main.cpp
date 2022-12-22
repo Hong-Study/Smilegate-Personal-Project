@@ -5,19 +5,20 @@
 #include "ClientNetwork.h"
 
 using namespace std;
-ClientNetwork _socket[20];
+ClientNetwork _socket[100];
 
 void ThreadRun(int i) {
     string s = "https://naver.com" + i;
     while (true) {
         _socket[i].Send(s, 0);
         _socket[i].Recv();
-        cout << _socket[i].getString() << endl;
+        cout << _socket[i].getNormalString() << endl;
     }
 }
+
 int main() {
     std::vector<thread> threads;
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 100; i++) {
         _socket[i].SetBind(L"127.0.0.1", 5005);
         _socket[i].Connect();
         threads.emplace_back(ThreadRun, i);

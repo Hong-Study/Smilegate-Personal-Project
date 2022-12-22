@@ -14,7 +14,6 @@ public:
 
 private:
 	queue<DBConnectorRef> _connectorPool;
-	atomic<int> useCount;
 
 	SpinLock s;
 };
