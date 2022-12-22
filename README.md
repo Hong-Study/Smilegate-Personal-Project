@@ -198,3 +198,12 @@ string ShortAlgorightm::convURLtoShort(const char* str, int len)
 ## 개발관련 과정에서 궁금했던 부분
 - 실제로 메모리 풀을 구현하는게 속도 부분에서 좀 더 빠른지?
 - IOCP 코어 개발할 때, 어디 부분까지(메모리풀, STL, 등) 구현하는게 좋은지, 그리고 마이크로 아키텍처를 설계할 때, 서비스 별로 설계하는데 그러한 부분들을 어떻게 설계해야하는지 궁금합니다.
+
+
+## 참고사이트
+https://gist.github.com/jaytaylor/a11fadf61a869ade0dfe568606b216c8
+https://jupiny.com/2017/11/07/docker-mysql-replicaiton/
+https://shonm.tistory.com/465
+https://developmoments.tistory.com/60
+https://42place.innovationacademy.kr/archives/9063
+
