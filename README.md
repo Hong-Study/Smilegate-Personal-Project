@@ -161,7 +161,8 @@ string ShortAlgorightm::convURLtoShort(const char* str, int len)
 ```
 
 ## 작동 화면
-
+![image](img/URL변경.PNG)
+![image](img/브라우저열기.PNG)
 
 
 
