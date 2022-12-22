@@ -201,9 +201,9 @@ string ShortAlgorightm::convURLtoShort(const char* str, int len)
 
 
 ## 참고사이트
-https://gist.github.com/jaytaylor/a11fadf61a869ade0dfe568606b216c8
-https://jupiny.com/2017/11/07/docker-mysql-replicaiton/
-https://shonm.tistory.com/465
-https://developmoments.tistory.com/60
-https://42place.innovationacademy.kr/archives/9063
+https://gist.github.com/jaytaylor/a11fadf61a869ade0dfe568606b216c8<br>
+https://jupiny.com/2017/11/07/docker-mysql-replicaiton/<br>
+https://shonm.tistory.com/465<br>
+https://developmoments.tistory.com/60<br>
+https://42place.innovationacademy.kr/archives/9063<br>
 
