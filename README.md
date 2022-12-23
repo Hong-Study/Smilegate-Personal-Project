@@ -50,7 +50,7 @@ private:
 };
 
 extern DBConnectionPool* dbPool;
-  ```
+ ```
 
 ### 2. DB URL Mapping 구현
 ```char* DBConnector::MappingURL(string url)
@@ -68,7 +68,8 @@ extern DBConnectionPool* dbPool;
 	cout << "Mapping Success" << endl;
 
 	return sql_Row[0];
-}```
+}
+```
 
 ### 3. DB URL Insert 구현
 ```bool DBConnector::InsertURL(string urlL, string urlS)
@@ -79,7 +80,8 @@ extern DBConnectionPool* dbPool;
 		return false;
 	cout << "Input 성공" << endl;
 	return true;
-}```
+}
+```
 
 ### 3. ShortAlgorightm 구현
 - SHA256 알고리즘으로 해쉬값을 얻은 후, 얻은 해쉬값의 5자리를 비트로 변환 후 Base62로 인코딩.
